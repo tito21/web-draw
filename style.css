@@ -1,5 +1,18 @@
-#bar {
-  background-color: #00CCFF;
+body {
+	margin: 0;
 }
 
+#bar {
+	background-color: #1779E3;
+	width:25%;
+	height:100%;
+	padding-left: 8px;
+	float:left;
+}
+
+#canvas {
+	width: auto;
+	float: right;
+	background-color: #000;
+}
 
