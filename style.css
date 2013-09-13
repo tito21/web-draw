@@ -4,15 +4,23 @@ body {
 
 #bar {
 	background-color: #1779E3;
-	width:25%;
-	height:100%;
+	width:20%;
+	height: 100vh;
+	min-width: 150px;
 	padding-left: 8px;
 	float:left;
 }
 
 #canvas {
-	width: auto;
-	float: right;
+	width: 80%;
+	height: 100vh;
+	margin-left: 20%;
 	background-color: #000;
+	overflow: hidden;
+}
+
+canvas {
+	display: inline-block;
+	overflow: hidden;
 }
 
