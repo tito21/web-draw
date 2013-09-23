@@ -1,51 +1,97 @@
-var img = new Image();
+/*
+*
+* Coded with love for Omi ♥, by Alberto Di Biase
+*
+----------------------------------------------------------
+All features will be crated as a separete object in lib.js
+and in this script will go all the control structures.
+*/
 
-function loadImage() {	
-	var url = document.getElementById("URL").value;
-	img.src = url;
-	dImage();
+/**
+ * Provides requestAnimationFrame in a cross browser way.
+ * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+ */
+
+if ( !window.requestAnimationFrame ) {
+
+	window.requestAnimationFrame = ( function() {
+
+		return window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame || // comment out if FF4 is slow (it caps framerate at ~30fps: https://bugzilla.mozilla.org/show_bug.cgi?id=630127)
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+
+			window.setTimeout( callback, 1000 / 60 );
+
+		};
+
+	} )();
+
+}
+/*/---My code -- /*/
+
+function loadImage() {
+	var url = UI.url;
+	var img = new Image_Can(url);
+	var aspc = (img.height) / (img.width);
+	can.height = window.innerHeight - 100;
+	can.width = (window.innerHeight - 100) / aspc;
+	img.dispImage(ctx);
+	console.log(window.innerWidth, window.innerHeight, img.width, img.height, can.width, can.height);
 }
 
-function loadGrid() {	
-	var size = document.getElementById("size").value;
-	colm = can_img.width / size;
-	rows = can_img.height / size;
-	dGrid(colm, rows);
+function loadGrid() {
+	var size = UI.size;
+	var colms = UI.colms;
+	var rows = UI.rows;
+	var g = new Grid(colms, rows, size);
+	g.dispGrid();
+}
+
+function saveImage(){
+	var file = can.toDataURL("image/png", "");
+	var a = document.getElementById("link");
+	console.log(file);
+	a.herf(file);
+}
+
+var UI = new function() {
+	this.url = 'http://www.balloon-juice.com/wp-content/uploads/2011/09/Starry_Night_Over_the_Rhone-1024x682.jpg';
+	this.size = 10;
+	this.colms = 10;
+	this.rows = 10;
+	this.grid = false;
+}
+
+function init() {
+	console.log("hi");
+	loadImage();
+	if (UI.grid) loadGrid();
+}
+
+window.onload = function() {
+	var gui = new dat.GUI();  
+	var guiURL = gui.add(UI, 'url');  
+	gui.add(UI, 'size');  
+	gui.add(UI, 'colms');  
+	gui.add(UI, 'rows');
+	gui.add(UI, 'grid');
+	
+	guiURL.onFinishChange(function(value){
+		loadImage();
+	});
+
+	animate();
+};
+
+function animate() {
+	requestAnimationFrame( animate );
+	init();
 }
 
 var cont = document.getElementById('canvas');
-var can_img = document.getElementById('can_img');
-var can_grid = document.getElementById('can_grid');
-var ctx_img = can_img.getContext('2d');
-var ctx_grid = can_grid.getContext('2d');
-
-function dImage() {
-	img.onload = function() {
-		can_img.width = img.width;
-		can_img.height = img.height;
-		can_grid.width = img.width;
-		can_grid.height = img.height;
-		ctx_img.drawImage(img, 0, 0);
-	}
-}
-
-function dGrid(colm, rows) {
-	ctx_grid.beginPath();
-
-	for (var x = 0; x <= can_img.width; x += colm) {
-		ctx_grid.moveTo(0.5 + x, 0);
-		ctx_grid.lineTo(0.5 + x, can_img.width);
- 	}
-
-	for (var y = 0; y <= can_img.height; y += rows) {
-   	ctx_grid.moveTo(0, 0.5 + y);
-		ctx_grid.lineTo(can_img.height, 0.5 + y);
-	}
-
-	ctx_grid.strokeStyle = "black";
-	ctx_grid.stroke();
-}
-
-
-document.getElementById("bttn_LI").addEventListener("click", function(){loadImage()});
-document.getElementById("bttn_DG").addEventListener("click", function(){loadGrid()});
+var can = document.getElementById('can');
+can.width = 500;
+can.height = 500;
+var ctx = can.getContext('2d');
