@@ -65,7 +65,6 @@ var UI = new function() {
 }
 
 function init() {
-	console.log("hi");
 	loadImage();
 	if (UI.grid) loadGrid();
 }
@@ -73,13 +72,16 @@ function init() {
 window.onload = function() {
 	var gui = new dat.GUI();  
 	var guiURL = gui.add(UI, 'url');  
-	gui.add(UI, 'size');  
+	gui.add(UI, 'size', 0, 30);  
 	gui.add(UI, 'colms');  
 	gui.add(UI, 'rows');
-	gui.add(UI, 'grid');
-	
+	var guiGrid = gui.add(UI, 'grid');
+
 	guiURL.onFinishChange(function(value){
 		loadImage();
+	});
+	guiGrid.onFinishChange(function(value){
+		loadGrid();
 	});
 
 	animate();

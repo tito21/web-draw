@@ -5,6 +5,11 @@ function Grid(colm, rows, size) {
 	this.rows = rows;
 	this.size = size;
 
+	if (size > 0) {
+		this.rows = can.height / this.size;
+		this.colm = can.width / this.size;
+	}
+
 }
 
 Grid.prototype.dispGrid = function() { // Grid method
@@ -37,6 +42,10 @@ function Image_Can (url) {
 	this.width = this.image.width;
 }
 
-Image_Can.prototype.dispImage = function(ctx) {
+Image_Can.prototype.dispImage = function() {
 	ctx.drawImage(this.image, 0, 0, can.width, can.height);
+};
+
+Image_Can.prototype.filter = function() {
+	this.img;
 };

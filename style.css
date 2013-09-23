@@ -23,5 +23,6 @@ body, div {
 	background-color: #555;
 }
 canvas {
-	margin: 0, 50px, 0, 50px;
+	margin-left: 10%;
+	margin-top: 10px;
 }
