@@ -1,3 +1,14 @@
+//UI elements
+
+var UI = new function() {
+	this.url = 'http://www.balloon-juice.com/wp-content/uploads/2011/09/Starry_Night_Over_the_Rhone-1024x682.jpg';
+	this.size = 10;
+	this.colm = 10;
+	this.rows = 10;
+	this.grid = false;
+	this.aplFilter = false;
+}
+
 // Grid Object
 
 function Grid(colm, rows, size) {
@@ -5,7 +16,7 @@ function Grid(colm, rows, size) {
 	this.rows = rows;
 	this.size = size;
 
-	if (size > 0) {
+	if (this.size > 0) {
 		this.rows = can.height / this.size;
 		this.colm = can.width / this.size;
 	}
@@ -15,7 +26,10 @@ function Grid(colm, rows, size) {
 Grid.prototype.dispGrid = function() { // Grid method
 	ctx.beginPath();
 
-	console.log(this.colm, this.rows);
+	if (this.size > 0) {
+		this.rows = can.height / this.size;
+		this.colm = can.width / this.size;
+	}
 
 	for (var x = 0; x <= can.width; x += this.colm) {
 
@@ -45,7 +59,19 @@ function Image_Can (url) {
 Image_Can.prototype.dispImage = function() {
 	ctx.drawImage(this.image, 0, 0, can.width, can.height);
 };
+Image_Can.prototype.setImage = function(url) {
+	this.image.src =url;
+	this.height = this.image.height;
+	this.width = this.image.width;
+};
 
-Image_Can.prototype.filter = function() {
-	this.img;
+function Filter (img) {
+	this.type;
+	this.image = img;
+}
+
+Filter.prototype.calcFilter = function() {
+	var newImage = this.image;
+	console.log('filter');
+	return newImage;
 };

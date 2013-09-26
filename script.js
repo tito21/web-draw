@@ -29,53 +29,33 @@ if ( !window.requestAnimationFrame ) {
 	} )();
 
 }
-/*/---My code -- /*/
 
-function loadImage() {
-	var url = UI.url;
-	var img = new Image_Can(url);
-	var aspc = (img.height) / (img.width);
-	can.height = window.innerHeight - 100;
-	can.width = (window.innerHeight - 100) / aspc;
-	img.dispImage(ctx);
-	console.log(window.innerWidth, window.innerHeight, img.width, img.height, can.width, can.height);
-}
-
-function loadGrid() {
-	var size = UI.size;
-	var colms = UI.colms;
-	var rows = UI.rows;
-	var g = new Grid(colms, rows, size);
-	g.dispGrid();
-}
-
-function saveImage(){
-	var file = can.toDataURL("image/png", "");
-	var a = document.getElementById("link");
-	console.log(file);
-	a.herf(file);
-}
-
-var UI = new function() {
-	this.url = 'http://www.balloon-juice.com/wp-content/uploads/2011/09/Starry_Night_Over_the_Rhone-1024x682.jpg';
-	this.size = 10;
-	this.colms = 10;
-	this.rows = 10;
-	this.grid = false;
-}
-
-function init() {
-	loadImage();
-	if (UI.grid) loadGrid();
-}
+//Global instances of the fueters
+var img, g, filter;
+var ctx;
+var can;
+var UI;
 
 window.onload = function() {
-	var gui = new dat.GUI();  
+	
+	can = document.getElementById('can');
+	can.width = 500;
+	can.height = 500;
+	ctx = can.getContext('2d');
+	//get the canvas
+
+	/*/ UI stuff /*/
+
+	var gui = new dat.GUI(); 
 	var guiURL = gui.add(UI, 'url');  
-	gui.add(UI, 'size', 0, 30);  
-	gui.add(UI, 'colms');  
-	gui.add(UI, 'rows');
-	var guiGrid = gui.add(UI, 'grid');
+	var gridFolder = gui.addFolder('Grid');
+	var guiGrid = gridFolder.add(UI, 'grid');
+	gridFolder.add(UI, 'size', 0, 30);  
+	gridFolder.add(UI, 'colm');  
+	gridFolder.add(UI, 'rows');
+	gridFolder.open();
+	var filterFolder = gui.addFolder('Filter');
+	var guiFilter = filterFolder.add(UI, 'aplFilter');
 
 	guiURL.onFinishChange(function(value){
 		loadImage();
@@ -83,17 +63,47 @@ window.onload = function() {
 	guiGrid.onFinishChange(function(value){
 		loadGrid();
 	});
+	guiFilter.onFinishChange(function(value){
+		setFilter();
+	});
+	//End UI
+
+	// Starting objects
+	img = new Image_Can(UI.url);
+	g = new Grid(UI.colm, UI.rows, UI.size);
+	filter = new Filter(img.image);
 
 	animate();
 };
+
+function loadImage() {
+	var url = UI.url;
+	img.setImage(url);
+	var aspc = (img.height) / (img.width);
+	can.height = window.innerHeight - 100;
+	can.width = (window.innerHeight - 100) / aspc;
+	img.dispImage();
+}
+
+function setFilter() {
+	var filtered = filter.calcFilter();
+	img.setImage(filtered);
+}
+
+function loadGrid() {
+	g.size = UI.size;
+	g.colm = UI.colm;
+	g.rows = UI.rows;
+	g.dispGrid();
+}
+
+function init() {
+	loadImage();
+	//img.dispImage();
+	if (UI.grid) loadGrid();
+}
 
 function animate() {
 	requestAnimationFrame( animate );
 	init();
 }
-
-var cont = document.getElementById('canvas');
-var can = document.getElementById('can');
-can.width = 500;
-can.height = 500;
-var ctx = can.getContext('2d');
