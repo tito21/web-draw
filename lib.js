@@ -2,7 +2,7 @@
 
 var UI = new function() {
 	this.url = 'http://www.balloon-juice.com/wp-content/uploads/2011/09/Starry_Night_Over_the_Rhone-1024x682.jpg';
-	this.size = 10;
+	this.size = 4;
 	this.colm = 10;
 	this.rows = 10;
 	this.grid = false;
@@ -41,7 +41,7 @@ Grid.prototype.dispGrid = function() { // Grid method
 		ctx.moveTo(0.5, 0.5 + y);
 		ctx.lineTo(can.width, 0.5 + y);
 	}
-
+	console.log(this.size);
 	ctx.strokeStyle = "black";
 	ctx.stroke();
 };
@@ -63,15 +63,4 @@ Image_Can.prototype.setImage = function(url) {
 	this.image.src =url;
 	this.height = this.image.height;
 	this.width = this.image.width;
-};
-
-function Filter (img) {
-	this.type;
-	this.image = img;
-}
-
-Filter.prototype.calcFilter = function() {
-	var newImage = this.image;
-	console.log('filter');
-	return newImage;
 };

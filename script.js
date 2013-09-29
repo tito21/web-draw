@@ -30,7 +30,7 @@ if ( !window.requestAnimationFrame ) {
 
 }
 
-//Global instances of the fueters
+//Global instances
 var img, g, filter;
 var ctx;
 var can;
@@ -50,7 +50,7 @@ window.onload = function() {
 	var guiURL = gui.add(UI, 'url');  
 	var gridFolder = gui.addFolder('Grid');
 	var guiGrid = gridFolder.add(UI, 'grid');
-	gridFolder.add(UI, 'size', 0, 30);  
+	gridFolder.add(UI, 'size', 0, 10).step(1);
 	gridFolder.add(UI, 'colm');  
 	gridFolder.add(UI, 'rows');
 	gridFolder.open();
@@ -58,10 +58,10 @@ window.onload = function() {
 	var guiFilter = filterFolder.add(UI, 'aplFilter');
 
 	guiURL.onFinishChange(function(value){
-		loadImage();
+		setImage();
 	});
 	guiGrid.onFinishChange(function(value){
-		loadGrid();
+		dispImage();
 	});
 	guiFilter.onFinishChange(function(value){
 		setFilter();
@@ -71,22 +71,27 @@ window.onload = function() {
 	// Starting objects
 	img = new Image_Can(UI.url);
 	g = new Grid(UI.colm, UI.rows, UI.size);
-	filter = new Filter(img.image);
-
+	//filter = new Filter();
+	setImage();
+	dispImage();
 	animate();
 };
 
-function loadImage() {
+function dispImage() {
+	img.dispImage();
+}
+
+function setImage() {
 	var url = UI.url;
 	img.setImage(url);
 	var aspc = (img.height) / (img.width);
-	can.height = window.innerHeight - 100;
-	can.width = (window.innerHeight - 100) / aspc;
+	can.height = window.innerHeight - 15;
+	can.width = (window.innerHeight - 15) / aspc;
 	img.dispImage();
 }
 
 function setFilter() {
-	var filtered = filter.calcFilter();
+	//var filtered = filter.calcFilter();
 	img.setImage(filtered);
 }
 
@@ -98,9 +103,12 @@ function loadGrid() {
 }
 
 function init() {
-	loadImage();
-	//img.dispImage();
-	if (UI.grid) loadGrid();
+	dispImage();
+	if (UI.grid) {
+		loadGrid();
+	} else {
+		dispImage();	
+	}
 }
 
 function animate() {
