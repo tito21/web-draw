@@ -1,6 +1,6 @@
 //UI elements
 
-var UI = new function() {
+function UI() {
 	this.url = 'http://www.balloon-juice.com/wp-content/uploads/2011/09/Starry_Night_Over_the_Rhone-1024x682.jpg';
 	this.size = 4;
 	this.colm = 10;
@@ -23,7 +23,7 @@ function Grid(colm, rows, size) {
 
 }
 
-Grid.prototype.dispGrid = function() { // Grid method
+Grid.prototype.dispGrid = function() {
 	ctx.beginPath();
 
 	if (this.size > 0) {
@@ -41,7 +41,6 @@ Grid.prototype.dispGrid = function() { // Grid method
 		ctx.moveTo(0.5, 0.5 + y);
 		ctx.lineTo(can.width, 0.5 + y);
 	}
-	console.log(this.size);
 	ctx.strokeStyle = "black";
 	ctx.stroke();
 };
@@ -49,9 +48,17 @@ Grid.prototype.dispGrid = function() { // Grid method
 // Image Object
 
 function Image_Can (url) {
-	this.image = new Image();
 	this.url = url;
-	this.image.src = url;
+	$.getImageData({
+		url: this.url,
+		success: function (image) {
+		this.image = image;	
+		},
+
+		error: function(xhr, text_status){
+			// Handle your error here
+ 		}
+	});
 	this.height = this.image.height;
 	this.width = this.image.width;
 }
@@ -59,8 +66,13 @@ function Image_Can (url) {
 Image_Can.prototype.dispImage = function() {
 	ctx.drawImage(this.image, 0, 0, can.width, can.height);
 };
+
 Image_Can.prototype.setImage = function(url) {
 	this.image.src =url;
 	this.height = this.image.height;
 	this.width = this.image.width;
 };
+
+Image_Can.prototype.getImage = function() {
+	return (this.image);
+}

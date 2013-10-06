@@ -45,17 +45,18 @@ window.onload = function() {
 	//get the canvas
 
 	/*/ UI stuff /*/
-
-	var gui = new dat.GUI(); 
-	var guiURL = gui.add(UI, 'url');  
+	UI = new UI;
+	var gui = new dat.GUI();
+	var guiURL = gui.add(UI, 'url');
 	var gridFolder = gui.addFolder('Grid');
 	var guiGrid = gridFolder.add(UI, 'grid');
 	gridFolder.add(UI, 'size', 0, 10).step(1);
-	gridFolder.add(UI, 'colm');  
-	gridFolder.add(UI, 'rows');
+	gridFolder.add(UI, 'colm').step(1); 
+	gridFolder.add(UI, 'rows').step(1);
 	gridFolder.open();
 	var filterFolder = gui.addFolder('Filter');
 	var guiFilter = filterFolder.add(UI, 'aplFilter');
+	filterFolder.open();
 
 	guiURL.onFinishChange(function(value){
 		setImage();
@@ -66,12 +67,12 @@ window.onload = function() {
 	guiFilter.onFinishChange(function(value){
 		setFilter();
 	});
+
 	//End UI
 
 	// Starting objects
 	img = new Image_Can(UI.url);
 	g = new Grid(UI.colm, UI.rows, UI.size);
-	//filter = new Filter();
 	setImage();
 	dispImage();
 	animate();
@@ -91,7 +92,9 @@ function setImage() {
 }
 
 function setFilter() {
-	//var filtered = filter.calcFilter();
+    var filtered = img.getImage();
+    console.log(filtered);
+    Filters.greyscale(filtered);
 	img.setImage(filtered);
 }
 
@@ -104,11 +107,8 @@ function loadGrid() {
 
 function init() {
 	dispImage();
-	if (UI.grid) {
-		loadGrid();
-	} else {
-		dispImage();	
-	}
+	if (UI.grid) loadGrid();
+	if (UI.aplfilter) setFilter();
 }
 
 function animate() {
