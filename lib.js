@@ -49,16 +49,8 @@ Grid.prototype.dispGrid = function() {
 
 function Image_Can (url) {
 	this.url = url;
-	$.getImageData({
-		url: this.url,
-		success: function (image) {
-		this.image = image;	
-		},
-
-		error: function(xhr, text_status){
-			// Handle your error here
- 		}
-	});
+	this.image = new Image();
+	this.setImage();
 	this.height = this.image.height;
 	this.width = this.image.width;
 }
@@ -68,7 +60,17 @@ Image_Can.prototype.dispImage = function() {
 };
 
 Image_Can.prototype.setImage = function(url) {
-	this.image.src =url;
+	this.url =url;
+	$.getImageData({
+		url: this.url,
+		server: 'http://maxnov.com/getimagedata/getImageData.php',
+		success: function (image) {
+		ctx.drawImage(image, 0, 0, can.width, can.height);
+		},
+
+		error: function(xhr, text_status){
+ 		}
+	});
 	this.height = this.image.height;
 	this.width = this.image.width;
 };

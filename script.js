@@ -112,6 +112,6 @@ function init() {
 }
 
 function animate() {
-	requestAnimationFrame( animate );
+	requestAnimationFrame(animate);
 	init();
 }
