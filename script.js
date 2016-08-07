@@ -31,10 +31,9 @@ if ( !window.requestAnimationFrame ) {
 }
 
 //Global instances
-var img, g, filter;
+var g, filter;
 var ctx;
 var can;
-var UI;
 
 window.onload = function() {
 	
@@ -44,8 +43,15 @@ window.onload = function() {
 	ctx = can.getContext('2d');
 	//get the canvas
 
-	/*/ UI stuff /*/
-	UI = new UI;
+	// Starting objects
+	//img = new Image_Can(UI.url);
+	g = new Grid(UI.colm, UI.rows, UI.size);
+	setImage();
+	dispImage();	
+	animate();
+};
+
+/*/ UI stuff /*/
 	var gui = new dat.GUI();
 	var guiURL = gui.add(UI, 'url');
 	var gridFolder = gui.addFolder('Grid');
@@ -70,32 +76,24 @@ window.onload = function() {
 
 	//End UI
 
-	// Starting objects
-	img = new Image_Can(UI.url);
-	g = new Grid(UI.colm, UI.rows, UI.size);
-	setImage();
-	dispImage();
-	animate();
-};
-
 function dispImage() {
-	img.dispImage();
+	Image_Can.dispImage();
 }
 
 function setImage() {
 	var url = UI.url;
-	img.setImage(url);
-	var aspc = (img.height) / (img.width);
+	Image_Can.getData(url);
+	var aspc = (Image_Can.height) / (Image_Can.width);
 	can.height = window.innerHeight - 15;
 	can.width = (window.innerHeight - 15) / aspc;
-	img.dispImage();
+	Image_Can.dispImage();
 }
 
 function setFilter() {
-    var filtered = img.getImage();
-    console.log(filtered);
-    Filters.greyscale(filtered);
-	img.setImage(filtered);
+	var filtered = Image_Can.getImage();
+	console.log(filtered);
+	Filters.greyscale(filtered);
+	Image_Can.setImage(filtered);
 }
 
 function loadGrid() {
@@ -112,6 +110,6 @@ function init() {
 }
 
 function animate() {
-	requestAnimationFrame(animate);
 	init();
+	requestAnimationFrame(animate);
 }
